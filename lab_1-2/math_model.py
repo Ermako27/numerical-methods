@@ -1,12 +1,6 @@
 from math import sin, exp
 
 
-def two_args(x, y):
-    return (x**3) + (y**2)
-
-
-
-
 def one_arg(x):
     pi = 3.14
     #return x**2-5
@@ -15,88 +9,81 @@ def one_arg(x):
     # return round(sin(x), 4)
 
 
-""" разделенная разность """
-def divided_difference(args, f):
-    if len(args) == 1:
-        return f(args[0])
-    i = args[:-1]
-    j = args[1:]
-    #print(args[0], args[1])
-    #print(i, j)
-    #print('--------------')
-    #print(divided_difference(j,f))
-    return round((divided_difference(i, f) - divided_difference(j, f))/(args[0] - args[-1]), 3)
+# разделенная разность
+def divided_difference(x_args, y_args):  # x_arags, y_args - tuples
+    if len(x_args) == 1:
+        return y_args[0]
+    y_i = y_args[:-1]
+    y_j = y_args[1:]
+
+    x_i = x_args[:-1]
+    x_j = x_args[1:]
+
+    x_current_i = x_args[-1]
+    x_current_j = x_args[0]
+
+    return round((divided_difference(x_i, y_i) - divided_difference(x_j, y_j)) / (x_current_j - x_current_i), 3)
 
 
-""" Рассчет полинома Ньютона
-    n - степень полинома, x - аргумент полинома"""
-def polynomial(n, x, args, f):
+def polynomial(n, x, x_args, y_args):
     print()
     p = 0
     x_multiply = 1
-    y0 = f(args[0])
+    y0 = y_args[0]
     if n == 0:
         return y0
     for i in range(n):
-        x_multiply *= (x - args[i])
-        p += x_multiply * divided_difference(args[:i+2], f)
-        print('y', args[:i+2], '=', divided_difference(args[:i+2], f))
+        x_multiply *= (x - x_args[i])
+        p += x_multiply * divided_difference(x_args[:i+2], y_args[:i+2])
+        print('y', y_args[:i+2], '=', divided_difference(x_args[:i+2], y_args[:i+2]))
     return p + y0
 
 
-def reverse_divided_difference(args, f):
-    if len(args) == 1:
-        return f(args[0])
-    i = args[:-1]
-    j = args[1:]
-    #print(args[0], args[1])
-    #print(i, j)
-    #print('--------------')
-    return (args[0] - args[-1])/(reverse_divided_difference(i, f) - reverse_divided_difference(j, f))
+# нахождение диапазона иксов содержащего в себе x
+def initial_config(x, count, x_args, y_args):  # count - размер диапазона
+    close_elem_pos = 0
+    delta = abs(x_args[0] - x)
+    length = len(x_args)
 
+    for i in range(length):  # нахождение позиции самого близкого по значению элемента
+        if abs(x_args[i] - x) < delta:
+            close_elem_pos = i
+            delta = abs(x_args[i] - x)
 
-def reversed_polynomial(n, y, args, f):
-    print()
-    p = 0
-    y_multiply = 1
-    x0 = args[0]
-    if n == 0:
-        return x0
-    for i in range(n):
-        y_multiply *= (y - f(args[i]))
-        p += y_multiply * reverse_divided_difference(args[:i+2], f)
-        print('y', args[:i+2], '=', reverse_divided_difference(args[:i+2], f))
-    return round(p + x0, 4)
+    if close_elem_pos < count:
+        return x_args[0:count], y_args[0:count]
+    elif close_elem_pos > (length - count):
+        return x_args[(length - count):], y_args[(length - count):]
+    else:
+        if count == 0:
+            return x_args[close_elem_pos], y_args[close_elem_pos]
+        if count == 1:  # если степень полинома == 1
+            if x > x_args[close_elem_pos]:
+                return x_args[close_elem_pos:close_elem_pos+2], y_args[close_elem_pos:close_elem_pos+2]
+            else:
+                return x_args[close_elem_pos-1:close_elem_pos+1], y_args[close_elem_pos-1:close_elem_pos+1]
+        elif count % 2 == 0:
+            i = close_elem_pos-int(count/2)
+            j = close_elem_pos+int(count/2)
+            return x_args[i:j], y_args[i:j]
+        elif count % 2 != 0:
+            i = close_elem_pos-int((count-1)/2)
+            j = close_elem_pos+int((count-1)/2)
+            return x_args[i:j+1], y_args[i:j+1]
+
+    # print(close_elem_pos)
+
 
 
 
 def main():
+    pass
     #print(f(6))
-    #print(divided_difference((1, 2, 3)))
+    # print(divided_difference((1, 2, 3), (0.5, 0.866, 1)))
+    # print(polynomial(2, 1.5, (1, 2, 3), (0.5, 0.866, 1)))
 
-    print(polynomial(3, 2.3, (1, 2, 3, 4)))
-    print(polynomial(3, 2.3, (2, 3, 4, 5)))
-
+    #print(initial_config(17,5,(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)))
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-"""
-    #x_values = [0.2,0.25,0.27,0.3]
-    x_values = [i/2 for i in range(x_gap_len)]  # промежуток иксов на котором идет поиск
-    y_values = [one_arg(i) for i in x_values]
-   
-    for i in range(4):
-        print('{:9f} | {:9.3f}'.format(x_values[i], y_values[i]))
-
-
-    result = reversed_polynomial(n, 0, x_values, one_arg)
-    print('-----------------------------------------')
-    print('\nРезультат интерполяции: ', result)
-    # print('Точное значение: ', f(x))
-
-"""
