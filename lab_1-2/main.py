@@ -22,7 +22,7 @@ choice = int(input('>>> '))
 if choice == 1:
 
     n = int(input('Введите степень полинома: '))  # степень полинома
-    x = float(input('Введите значение х: '))  
+    x = float(input('Введите значение х: '))
 
     x_config, y_config = initial_config(x, n, x_values, y_values)
 

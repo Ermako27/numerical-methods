@@ -41,6 +41,7 @@ def polynomial(n, x, x_args, y_args):
 
 # нахождение диапазона иксов содержащего в себе x
 def initial_config(x, count, x_args, y_args):  # count - размер диапазона
+    count+=1
     close_elem_pos = 0
     delta = abs(x_args[0] - x)
     length = len(x_args)
@@ -77,12 +78,11 @@ def initial_config(x, count, x_args, y_args):  # count - размер диапа
 
 
 def main():
-    pass
     #print(f(6))
     # print(divided_difference((1, 2, 3), (0.5, 0.866, 1)))
     # print(polynomial(2, 1.5, (1, 2, 3), (0.5, 0.866, 1)))
 
-    #print(initial_config(17,5,(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)))
+    print(initial_config(17,5,(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19),(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)))
 
 
 if __name__ == '__main__':
