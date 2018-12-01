@@ -1,12 +1,13 @@
-from math import sin, exp
+from math import cos, sin, exp
 
 
 def one_arg(x):
     pi = 3.14
     #return x**2-5
-    return (x - 1) ** 2 - 0.5*exp(x)
+    # (x - 1) ** 2 - 0.5*exp(x)
     #return sin((pi/6) * x)
     # return round(sin(x), 4)
+    return cos(x)
 
 
 # разделенная разность
@@ -40,9 +41,9 @@ def polynomial(n, x, x_args, y_args):
 
 
 # нахождение диапазона иксов содержащего в себе x
-def initial_config(x, count, x_args, y_args):  # count - размер диапазона
-    count+=1
-    close_elem_pos = 0
+def initial_config(x, count, x_args, y_args):  # count - размер диапазона (степень полинома)
+    copy_count = count + 1 # чтобы взять корней на 1 больше
+    close_elem_pos = 0  # позиция самого близкого по значению элемента (можно считать эту позицию позицией корня)
     delta = abs(x_args[0] - x)
     length = len(x_args)
 
@@ -50,26 +51,29 @@ def initial_config(x, count, x_args, y_args):  # count - размер диапа
         if abs(x_args[i] - x) < delta:
             close_elem_pos = i
             delta = abs(x_args[i] - x)
+    # print('QWER', x_args[close_elem_pos])
 
-    if close_elem_pos < count:
-        return x_args[0:count], y_args[0:count]
-    elif close_elem_pos > (length - count):
-        return x_args[(length - count):], y_args[(length - count):]
+    if close_elem_pos < copy_count:  # если позиция корне меньше количества корней
+        return x_args[0:copy_count], y_args[0:copy_count]  # то взять все значения до позиции, численной равной количеству необходимых корней
+
+    elif close_elem_pos > (length - copy_count):
+        return x_args[(length - copy_count):], y_args[(length - copy_count):]
     else:
-        if count == 0:
+        if count == 0:  # степень полинома = 0 -> вернуть один корень
             return x_args[close_elem_pos], y_args[close_elem_pos]
         if count == 1:  # если степень полинома == 1
             if x > x_args[close_elem_pos]:
+                # print("conf", x_args[close_elem_pos:close_elem_pos+2])
                 return x_args[close_elem_pos:close_elem_pos+2], y_args[close_elem_pos:close_elem_pos+2]
             else:
                 return x_args[close_elem_pos-1:close_elem_pos+1], y_args[close_elem_pos-1:close_elem_pos+1]
         elif count % 2 == 0:
-            i = close_elem_pos-int(count/2)
-            j = close_elem_pos+int(count/2)
+            i = close_elem_pos-int(copy_count/2)
+            j = close_elem_pos+int(copy_count/2)
             return x_args[i:j], y_args[i:j]
         elif count % 2 != 0:
-            i = close_elem_pos-int((count-1)/2)
-            j = close_elem_pos+int((count-1)/2)
+            i = close_elem_pos-int((copy_count-1)/2)
+            j = close_elem_pos+int((copy_count-1)/2)
             return x_args[i:j+1], y_args[i:j+1]
 
     # print(close_elem_pos)

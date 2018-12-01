@@ -57,4 +57,3 @@ result = polynomial(n, y, y_conf, x_interpolation)
 
 print('\nМой результат:', result)
 print('Результат функции:', f(x, y))
-

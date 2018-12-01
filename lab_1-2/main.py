@@ -1,10 +1,10 @@
 from math_model import *
 x_gap_len = 20
 x_values = []
-ar = 0.20
+ar = -2
 for i in range(x_gap_len):
     x_values.append(ar)
-    ar += 0.3
+    ar += 1
 
 y_values = [one_arg(i) for i in x_values]
 
@@ -15,14 +15,14 @@ for i in range(x_gap_len):
     print('{:9.3f} | {:9.3f}'.format(x_values[i], y_values[i]))
 
 print('\n1 - Найти значение функции с помощью полинома Ньютона')
-print('2 - Найти корни уравнения на отерзке [0-19] методом обратной интерполяции')
+print('2 - Найти корни уравнения на отерзке методом обратной интерполяции')
 choice = int(input('>>> '))
 
 
 if choice == 1:
 
     n = int(input('Введите степень полинома: '))  # степень полинома
-    x = float(input('Введите значение х: '))
+    x = float(input('Введите значение х: ')) # x в котором нужно уточнить значение
 
     x_config, y_config = initial_config(x, n, x_values, y_values)
 

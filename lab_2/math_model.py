@@ -34,10 +34,45 @@ def polynomial(n, x, x_args, y_args):
     return p + y0
 
 
+# # нахождение диапазона иксов содержащего в себе x
+# def initial_config(x, count, x_args):  # count - размер диапазона
+#     count+=1
+#     close_elem_pos = 0
+#     delta = abs(x_args[0] - x)
+#     length = len(x_args)
+#
+#     for i in range(length):  # нахождение позиции самого близкого по значению элемента
+#         if abs(x_args[i] - x) < delta:
+#             close_elem_pos = i
+#             delta = abs(x_args[i] - x)
+#
+#     if close_elem_pos < count:
+#         return x_args[0:count]
+#     elif close_elem_pos > (length - count):
+#         return x_args[(length - count):]
+#     else:
+#         if count == 0:
+#             return x_args[close_elem_pos]
+#         if count == 1:  # если степень полинома == 1
+#             if x > x_args[close_elem_pos]:
+#                 return x_args[close_elem_pos:close_elem_pos+2]
+#             else:
+#                 return x_args[close_elem_pos-1:close_elem_pos+1]
+#         elif count % 2 == 0:
+#             i = close_elem_pos-int(count/2)
+#             j = close_elem_pos+int(count/2)
+#             return x_args[i:j]
+#         elif count % 2 != 0:
+#             i = close_elem_pos-int((count-1)/2)
+#             j = close_elem_pos+int((count-1)/2)
+#             return x_args[i:j+1]
+#     # print(close_elem_pos)
+
+
 # нахождение диапазона иксов содержащего в себе x
-def initial_config(x, count, x_args):  # count - размер диапазона
-    count+=1
-    close_elem_pos = 0
+def initial_config(x, count, x_args):  # count - размер диапазона (степень полинома)
+    copy_count = count + 1 # чтобы взять корней на 1 больше
+    close_elem_pos = 0  # позиция самого близкого по значению элемента (можно считать эту позицию позицией корня)
     delta = abs(x_args[0] - x)
     length = len(x_args)
 
@@ -46,12 +81,13 @@ def initial_config(x, count, x_args):  # count - размер диапазона
             close_elem_pos = i
             delta = abs(x_args[i] - x)
 
-    if close_elem_pos < count:
-        return x_args[0:count]
-    elif close_elem_pos > (length - count):
-        return x_args[(length - count):]
+    if close_elem_pos < copy_count:  # если позиция корне меньше количества корней
+        return x_args[0:copy_count]  # то взять все значения до позиции, численной равной количеству необходимых корней
+
+    elif close_elem_pos > (length - copy_count):
+        return x_args[(length - copy_count):]
     else:
-        if count == 0:
+        if count == 0:  # степень полинома = 0 -> вернуть один корень
             return x_args[close_elem_pos]
         if count == 1:  # если степень полинома == 1
             if x > x_args[close_elem_pos]:
@@ -59,14 +95,14 @@ def initial_config(x, count, x_args):  # count - размер диапазона
             else:
                 return x_args[close_elem_pos-1:close_elem_pos+1]
         elif count % 2 == 0:
-            i = close_elem_pos-int(count/2)
-            j = close_elem_pos+int(count/2)
+            i = close_elem_pos-int(copy_count/2)
+            j = close_elem_pos+int(copy_count/2)
             return x_args[i:j]
         elif count % 2 != 0:
-            i = close_elem_pos-int((count-1)/2)
-            j = close_elem_pos+int((count-1)/2)
+            i = close_elem_pos-int((copy_count-1)/2)
+            j = close_elem_pos+int((copy_count-1)/2)
             return x_args[i:j+1]
-    # print(close_elem_pos)
+
 
 
 
